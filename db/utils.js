@@ -7,4 +7,3 @@ exports.insert_instance = function(instance){
 		return;
 	})
 }
-

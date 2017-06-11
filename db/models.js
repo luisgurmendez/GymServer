@@ -8,6 +8,7 @@ var userActivitySchema;
 var userActivityHistorySchema;
 
 create_schemas = function(){
+	
 	userSchema = new Schema({ 
 		username: {type: String, unique: true, required: true},
 		password: {type: String, required: true},
@@ -22,7 +23,8 @@ create_schemas = function(){
 		name: {type: String, required: true},
 		coaches: [String],
 		description: String,
-		credit: {type: Number, required: true},
+		credit: {type: Number, required: true}, // Amount of money for taking permanent class
+		oneTimeCredit: {type: Number, required: true}, // Amount of money for taking one class
 		dayOfTheWeek: {type: String, required: true},
 		hourIn: {type: Number, required: true}, // Minutes from midnight
 		hourOut: {type: Number, required: true} // Minutes from midnight
@@ -32,6 +34,7 @@ create_schemas = function(){
 	userActivitySchema = new Schema({
 		userId: {type: mongoose.Schema.ObjectId, required: true},
 		activityId: {type: mongoose.Schema.ObjectId, required: true},
+		creditToBePaid: {type: Number, required: true},
 		timestampIn: Date,
 		timestampOut: Date
 	});

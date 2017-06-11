@@ -1,7 +1,7 @@
 var Activity = require('./models').Activity;
 
-create_activity_instance = function(name, credit, dayOfTheWeek, hourIn, hourOut, coaches, description){
-	return new Activity({'name':name, 'credit':credit, 'dayOfTheWeek':dayOfTheWeek, 'hourIn':hourIn, 
+create_activity_instance = function(name, credit, oneTimeCredit, dayOfTheWeek, hourIn, hourOut, coaches, description){
+	return new Activity({'name':name, 'credit':credit, 'oneTimeCredit':oneTimeCredit, 'dayOfTheWeek':dayOfTheWeek, 'hourIn':hourIn, 
 						 'hourOut':hourOut, 'coaches':coaches, 'description':description, 'regularStudents':[]});
 }
 

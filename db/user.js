@@ -43,7 +43,34 @@ remove_user = function(username){
 update_user_money = function(username, money){
 	// Get user by username first
 	get_user_by_username(username, function(actual_user){
-		actual_user.money = money;
+		if (actual_user.money != 'undefined'){
+			actual_user.money = actual_user.money + money;
+		}else{
+			actual_user.money = money;
+		}
+        actual_user.save(function(err){
+        	if (err) throw err;
+		});
+	});
+}
+
+
+
+get_user_by_id = function(user_id, callback_function){
+	User.findOne({'_id':user_id}, function(err, user){
+		if (err) throw err;
+		callback_function(user);
+	});
+}
+
+update_user_money_by_id = function(user_id, money){
+	// Get user by username first
+	get_user_by_id(user_id, function(actual_user){
+		if (actual_user.money != 'undefined'){
+			actual_user.money = actual_user.money + money;
+		}else{
+			actual_user.money = money;
+		}
         actual_user.save(function(err){
         	if (err) throw err;
 		});
@@ -59,3 +86,6 @@ exports.get_all_users = get_all_users;
 exports.update_user_information = update_user_information;
 exports.remove_user = remove_user;
 exports.update_user_money = update_user_money;
+
+exports.get_user_by_id = get_user_by_id;
+exports.update_user_money_by_id = update_user_money_by_id;

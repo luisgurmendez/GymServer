@@ -6,6 +6,8 @@ const utils = require('./utils');
 const user_functions = require('./user');
 const activity_functions = require('./activity');
 const user_activity_functions = require('./user_activity');
+const user_activity_history_functions = require('./user_activity_history');
+const scheduler = require('./scheduler');
 
 // Connects to database
 mongoose.connect(conf.database_url);
@@ -14,17 +16,18 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 // On open the function gets executed 
 db.once('open', function(){
-	/*
-	instance = activity_functions.create_activity_instance('asfa', 234, 'Monday', 23, 2330, [], 'asfasf');
-	utils.insert_instance(instance);
-*/
-/*
-	user_activity_functions.add_user_to_activity_once(new ObjectId("593b6b52169b521c9419fde5"), new ObjectId("593b6d26897e6f182c97d389"), 235235235, 23523523);
-*/
 
+/*	utils.insert_instance(create_user_instance('aisognj','sgsd','sagfsa','sdgsd','asfos','asgfs',100));
+	utils.insert_instance(create_user_instance('CHE','sgsd','sagfsa','sdgsd','asfos','asgfs',130));
+	utils.insert_instance(create_activity_instance('aisognj',200, 30, 'sagfsa',3523,2235,['asgfs'],'sagfsa'));
+	user_activity_functions.add_user_to_activity_permanently(new ObjectId("593dbb1aa06aeb2ba0d7a061"), new ObjectId("593dbb1aa06aeb2ba0d7a063"), 200);
+	user_activity_functions.add_user_to_activity_once(new ObjectId("593dbb1aa06aeb2ba0d7a061"), new ObjectId("593dbb1aa06aeb2ba0d7a063"), new Date(), new Date(), 30);
+//	user_activity_functions.add_user_to_activity_once(new ObjectId("593dbb1aa06aeb2ba0d7a062"), new ObjectId("593dbb1aa06aeb2ba0d7a063"), new Date(), new Date(), 30);
+//	one_time_executions.update_money_for_one_time_activities(current_timestamp, end_of_the_day_timestamp);	
+/*	user_activity_history_functions.get_all_activities_by_user_in_timeframe(new ObjectId("593d9308bec1e506a425e94b"), current_timestamp, end_of_the_day_timestamp, function(users){
+		console.log(users);
+	});*/
 
-	user_activity_functions.check_if_user_is_doing_specific_one_time_activity(new ObjectId("593b6b52169b521c9419fde5"), new ObjectId("593b6d26897e6f182c97d389"), new Date("1970-01-04T17:20:35.235Z"), new Date("1970-01-01T06:32:03.523Z"), function(parameter){
-		console.log(parameter);
-	});
-
+//	scheduler.update_money_for_one_time_activities(0, + new Date());
+	
 });
