@@ -22,9 +22,9 @@ db.once('open', function(){
 	user_activity_functions.add_user_to_activity_once(new ObjectId("593b6b52169b521c9419fde5"), new ObjectId("593b6d26897e6f182c97d389"), 235235235, 23523523);
 */
 
-/*
-	user_activity_functions.check_if_user_is_doing_specific_one_time_activity(new ObjectId("593b6b52169b521c9419fde5"), new ObjectId("593b6d26897e6f182c97d389"), "1970-01-03T17:20:35.235Z", ISODate("1970-01-01T06:32:03.523Z"), function(parameter){
+
+	user_activity_functions.check_if_user_is_doing_specific_one_time_activity(new ObjectId("593b6b52169b521c9419fde5"), new ObjectId("593b6d26897e6f182c97d389"), new Date("1970-01-04T17:20:35.235Z"), new Date("1970-01-01T06:32:03.523Z"), function(parameter){
 		console.log(parameter);
 	});
-*/
+
 });
