@@ -88,15 +88,11 @@ app.post('/logout',function(req,res,next){
 
 app.post('/signup',function(req,res,next){
 
-
-
-
     user = User.create_user_instance(req.body.username,req.body.password,req.body.name,req.body.lastname, req.body.role, req.body.email)
     utils.insert_instance(user,function(){
         res.redirect('/login');
-
     });
-    
+
 })
 
 app.post('/email',function(req,res,next){
@@ -113,9 +109,7 @@ app.get('/', function(req, res, next) {
 
 app.post('/login',function(req,res,next){
 
-    console.log("post LOGIN")
     User.authenticate_user(req.body.username, req.body.password, function(auth){
-        console.log("Entra al cb")
         if(auth){
             var token= randtoken.generate(32)
             req.session.token = token;

@@ -6,9 +6,7 @@ create_user_instance = function(username, password, name, lastname, role, email,
 
 authenticate_user = function(username,password,cb){
 	get_user_by_username(username,function(user){
-		console.log(user)
 		if(user){
-            console.log("Entra al if")
             cb(password === user.password)
 		}else{
 			cb(false)
