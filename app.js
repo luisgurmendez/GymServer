@@ -81,7 +81,7 @@ app.get('/login',function(req,res){
 app.post('/logout',function(req,res,next){
     sessionHash[req.session.token]=null;
     req.session.token=null;
-    res.send(JSON.stringify({redirect:"http://localhost:3000/login"}))
+    res.send(JSON.stringify({loggedout:true}))
 
 })
 
