@@ -4,6 +4,18 @@ create_user_instance = function(username, password, name, lastname, role, email,
 	return new User({'username':username, 'password':password, 'name':name, 'lastname':lastname, 'role':role, 'email':email, 'money':money});
 }
 
+authenticate_user = function(username,password,cb){
+	get_user_by_username(username,function(user){
+		console.log(user)
+		if(user){
+            console.log("Entra al if")
+            cb(password === user.password)
+		}else{
+			cb(false)
+		}
+	});
+}
+
 get_user_by_username = function(username, callback_function){
 	User.findOne({'username':username}, function(err, user){
 		if (err) throw err;
@@ -82,6 +94,7 @@ var exports = module.exports = {};
 // Export methods
 exports.create_user_instance = create_user_instance
 exports.get_user_by_username = get_user_by_username;
+exports.authenticate_user = authenticate_user;
 exports.get_all_users = get_all_users;
 exports.update_user_information = update_user_information;
 exports.remove_user = remove_user;
