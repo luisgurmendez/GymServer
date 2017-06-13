@@ -7,9 +7,9 @@ create_user_instance = function(username, password, name, lastname, role, email,
 authenticate_user = function(username,password,cb){
 	get_user_by_username(username,function(user){
 		if(user){
-            cb(password === user.password)
+            cb({authentication:password === user.password,user:user})
 		}else{
-			cb(false)
+			cb({authentication:false})
 		}
 	});
 }
@@ -31,16 +31,19 @@ get_all_users = function(callback_function){
 update_user_information = function(username, user){
 	// Get user by username first
 	get_user_by_username(username, function(actual_user){
-		for (var field in User.schema.paths) {
-           if ((field !== '_id') && (field !== '__v')) {
-              if (user[field] !== undefined) {
-                 actual_user[field] = user[field];
-              }
-           }  
-        }
-        actual_user.save(function(err){
-        	if (err) throw err;
-		});
+		if(actual_user){
+            for (var field in User.schema.paths) {
+                if ((field !== '_id') && (field !== '__v')) {
+                    if (user[field] !== undefined) {
+                        actual_user[field] = user[field];
+                    }
+                }
+            }
+            actual_user.save(function(err){
+                if (err) throw err;
+            });
+		}
+
 	});
 }
 
@@ -50,7 +53,7 @@ remove_user = function(username){
 	});
 }
 
-update_user_money = function(username, money){
+update_user_money = function(username, money, cb){
 	// Get user by username first
 	get_user_by_username(username, function(actual_user){
 		if (actual_user.money != 'undefined'){
@@ -60,6 +63,7 @@ update_user_money = function(username, money){
 		}
         actual_user.save(function(err){
         	if (err) throw err;
+
 		});
 	});
 }

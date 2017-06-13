@@ -55,8 +55,9 @@ app.disable('etag');
 
 // Checks session. If not authenticated, redirect to /login
 app.all('*',function(req,res,next){
-
-    if(req.url === '/login' || req.url === '/signup' || req.url === '/email'){
+    console.log(req.url)
+    //if(req.url === '/login' || req.url === '/signup' || req.url === '/users/update'){
+    if(true){
         return next()
     }else{
         if(sessionHash[req.session.token]){
@@ -89,31 +90,56 @@ app.post('/logout',function(req,res,next){
 app.post('/signup',function(req,res,next){
 
     user = User.create_user_instance(req.body.username,req.body.password,req.body.name,req.body.lastname, req.body.role, req.body.email)
-    utils.insert_instance(user,function(){
-        res.redirect('/login');
+    utils.insert_instance(user,function(user){
+        res.send(JSON.stringify({user:user}))
+
     });
 
 })
 
-app.post('/email',function(req,res,next){
-    console.log("Send email verification to: " + req.body.email)
-    res.send(JSON.stringify({redirect:"http://localhost:3000/login"}))
+app.put('/users/update',function(req,res,next){
+
+    if(req.body.actualUsername){
+        var user = User.create_user_instance(req.body.username,req.body.password,req.body.name,req.body.lastname,req.body.role,req.body.email,req.body.money)
+        User.update_user_information(req.body.actualUsername,user)
+        res.send(JSON.stringify({user:user}))
+    }else{
+        res.send(JSON.stringify({user:{},error:"Provide username"}))
+    }
+})
+
+
+app.delete('/users/delete',function(req,res,next){
+    User.remove_user(req.body.username);
+    res.send("");
 
 })
 
 
-app.get('/', function(req, res, next) {
-    res.render('index');
-});
+app.put('/users/update/money',function(req,res,next){
+    if(req.body.username){
+        User.update_user_information(req.body.actualUsername,req.body.money)
+        res.send(JSON.stringify({money:req.body.money}))
+    }else{
+        res.send(JSON.stringify({money:0,error:"Provide username"}))
+    }
+})
 
+
+app.get('/users/all',function(req,res,next){
+    User.get_all_users(function(users){
+        res.send(JSON.stringify({users:users}))
+    })
+
+})
 
 app.post('/login',function(req,res,next){
 
-    User.authenticate_user(req.body.username, req.body.password, function(auth){
-        if(auth){
+    User.authenticate_user(req.body.username, req.body.password, function(doc){
+        if(doc.authentication){
             var token= randtoken.generate(32)
             req.session.token = token;
-            sessionHash[token] = doc._id.toString();
+            sessionHash[token] = doc.user._id.toString();
             //res.statusCode="302";
             //console.log("redirecting..")
             res.send(JSON.stringify({authenticate:true}));
@@ -123,6 +149,48 @@ app.post('/login',function(req,res,next){
     })
 
 });
+
+app.post('/activities/create',function(req,res,next){
+
+    var activity = Activity.create_activity_instance(req.body.name, req.body.credit, req.body.oneTimeCredit,req.body.dayOfTheWeek, req.body.hourIn,
+        req.body.hourOut, req.body.coaches, req.body.description);
+    utils.insert_instance(activity,function(){
+        res.send(JSON.stringify({activity:activity}))
+
+    })
+})
+
+app.get('/activities/all',function(req,res,next){
+    Activity.get_all_activities(function(activities){
+        res.send(JSON.stringify({activities:activities}))
+    })
+})
+
+app.delete('/activities/delete',function(req,res,next){
+    Activity.remove_activity(req.body.activityId);
+    res.send("");
+
+})
+
+app.put('/activities/update',function(req,res,next){
+    if(req.body.activityId){
+        var activity = Activity.create_activity_instance(req.body.name, req.body.credit, req.body.oneTimeCredit,req.body.dayOfTheWeek, req.body.hourIn,
+            req.body.hourOut, req.body.coaches, req.body.description);
+        Activity.update_activity(req.body.activityId,activity)
+        res.send(JSON.stringify({activity:activity}))
+    }else{
+        res.send(JSON.stringify({activity:{},error:"Provide id"}))
+    }
+
+})
+
+app.get('/activity/:activityId',function(req,res,next){
+    Activity.get_activity_by_id(req.body.activityId,function(activity){
+        res.send(JSON.stringify({activity:activity}))
+    })
+
+})
+
 
 
 
@@ -141,6 +209,8 @@ app.use(function(err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
+    console.log(err)
+
     res.render('error');
 });
 

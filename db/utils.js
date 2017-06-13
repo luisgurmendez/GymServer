@@ -4,6 +4,6 @@ exports.insert_instance = function(instance,cb){
 	var element = instance;
 	instance.save(function (err, element){
 		if (err) throw err;
-		cb()
+		cb(element)
 	})
 }
