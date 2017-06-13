@@ -257,7 +257,34 @@ app.get('/activity/:activityId',function(req,res,next){
 
         }
     })
+})
 
+
+app.post('/user/actvity/add',function(req,res,next){
+    var userId = sessionHash[req.session.token]
+    UserActivity.add_user_to_activity_permanently(userId,req.body.activityid,req.body.credits,function(err){
+        try{
+            if(err) throw err
+            res.send(JSON.stringify({success:true}))
+
+        }catch(e){
+            res.send(JSON.stringify({error:e.message}))
+        }
+    })
+})
+
+
+
+app.get('/user/activities',function(req,res,next){
+    UserActivity.get_all_activities_by_user(sessionHash[req.session.token],function(err,activities){
+        try{
+            if(err) throw err
+            res.send(JSON.stringify({activities:activities}))
+
+        }catch(e){
+            res.send(JSON.stringify({error:e.message}))
+        }
+    })
 })
 
 

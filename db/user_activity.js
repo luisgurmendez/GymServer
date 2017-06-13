@@ -3,7 +3,7 @@ var UserActivity = require('./models').UserActivity;
 add_user_to_activity_permanently = function(user_id, activity_id, credit_to_be_paid){
 	var instance = new UserActivity({'userId':user_id, 'activityId':activity_id, 'creditToBePaid': credit_to_be_paid});
 	instance.save(function(err){
-		if (err) throw err;
+		if (err) return cb(err);
 	})
 }
 
@@ -48,8 +48,8 @@ get_user_one_time_activities = function(user_id, callback_function){
 
 get_all_activities_by_user = function(user_id, callback_function){
 	UserActivity.find({'userId': user_id}, function(err, activities){
-		if (err) throw err;
-		callback_function(activities);
+		if (err) return cb(err);
+		callback_function(null,activities);
 	});
 }
 
