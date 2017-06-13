@@ -5,30 +5,31 @@ create_user_instance = function(username, password, name, lastname, role, email,
 }
 
 authenticate_user = function(username,password,cb){
-	get_user_by_username(username,function(user){
+	get_user_by_username(username,function(err, user){
+		if(err) return cb(err)
 		if(user){
-            cb({authentication:password === user.password,user:user})
+            cb(null,{authentication:password === user.password,user:user})
 		}else{
-			cb({authentication:false})
+			cb(null,{authentication:false})
 		}
 	});
 }
 
-get_user_by_username = function(username, callback_function){
+get_user_by_username = function(username, cb){
 	User.findOne({'username':username}, function(err, user){
-		if (err) throw err;
-		callback_function(user);
+		if (err) return cb(err);
+		cb(null,user);
 	});
 }
 
-get_all_users = function(callback_function){
+get_all_users = function(cb){
 	User.find(function (err, users){
-		if (err) throw err;
-		callback_function(users);
+		if (err) return cb(err);
+		cb(null,users);
 	});
 }
 
-update_user_information = function(username, user){
+update_user_information = function(username, user,cb){
 	// Get user by username first
 	get_user_by_username(username, function(actual_user){
 		if(actual_user){
@@ -40,16 +41,17 @@ update_user_information = function(username, user){
                 }
             }
             actual_user.save(function(err){
-                if (err) throw err;
+                if (err) return cb(err);
+                cb(null,actual_user)
             });
 		}
 
 	});
 }
 
-remove_user = function(username){
+remove_user = function(username,cb){
 	User.remove({'username':username}, function(err){
-		if (err) throw err;
+		if(err) return cb(err);
 	});
 }
 
@@ -62,7 +64,7 @@ update_user_money = function(username, money, cb){
 			actual_user.money = money;
 		}
         actual_user.save(function(err){
-        	if (err) throw err;
+        	if (err) return cb(err);
 
 		});
 	});
@@ -70,14 +72,14 @@ update_user_money = function(username, money, cb){
 
 
 
-get_user_by_id = function(user_id, callback_function){
+get_user_by_id = function(user_id, cb){
 	User.findOne({'_id':user_id}, function(err, user){
-		if (err) throw err;
-		callback_function(user);
+		if (err) return cb(err);
+		cb(null,user);
 	});
 }
 
-update_user_money_by_id = function(user_id, money){
+update_user_money_by_id = function(user_id, money,cb){
 	// Get user by username first
 	get_user_by_id(user_id, function(actual_user){
 		if (actual_user.money != 'undefined'){
@@ -86,7 +88,7 @@ update_user_money_by_id = function(user_id, money){
 			actual_user.money = money;
 		}
         actual_user.save(function(err){
-        	if (err) throw err;
+        	if (err) return cb(err);
 		});
 	});
 }

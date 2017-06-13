@@ -7,19 +7,19 @@ create_activity_instance = function(name, credit, oneTimeCredit, dayOfTheWeek, h
 
 get_activity_by_id = function(activity_id, callback_function){
 	Activity.findById(activity_id, function(err, activity){
-		if (err) throw err;
-		callback_function(activity);
+		if (err) return callback_function(err);
+		callback_function(null,activity);
 	});
 }
 
 get_all_activities = function(callback_function){
 	Activity.find(function (err, activities){
-		if (err) throw err;
-		callback_function(activities);
+		if (err) callback_function(err);
+		callback_function(null,activities);
 	});
 }
 
-update_activity = function(activity_id, activity){
+update_activity = function(activity_id, activity,cb){
 	// Get user by username first
 	get_activity_by_id(activity_id, function(actual_activity){
 		for (var field in Activity.schema.paths) {
@@ -30,14 +30,15 @@ update_activity = function(activity_id, activity){
            }  
         }
         actual_activity.save(function(err){
-        	if (err) throw err;
+        	if (err) return cb(err,actual_activity);
         });
 	});
 }
 
-remove_activity = function(activity_id){
+remove_activity = function(activity_id,cb){
 	Activity.remove({'_id':activity_id}, function(err){
-		if (err) throw err;
+		if (err) return cb(err);
+
 	});
 }
 

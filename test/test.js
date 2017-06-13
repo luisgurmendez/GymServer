@@ -16,8 +16,9 @@ test = {
 
         setTimeout(function(){
             err =  new Error("Error ivan gay")
-
-            cb(err)
+            //throw err
+            return cb(err)
+            console.log("ejectura")
         },1000)
     }
 }
