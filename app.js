@@ -276,7 +276,7 @@ app.post('/user/actvity/add',function(req,res,next){
 
 
 app.get('/user/activities',function(req,res,next){
-    UserActivity.get_all_activities_by_user(sessionHash[req.session.token],function(err,activities){
+    UserActivity.get_all_activities_by_user(sessionHash[req.session.token],function(err,userActivities){
         try{
             if(err) throw err
             res.send(JSON.stringify({activities:activities}))
